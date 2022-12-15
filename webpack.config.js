@@ -16,4 +16,6 @@ const module = {
     hot: true
   }
 }
+
+
 export default module;
