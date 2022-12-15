@@ -1,11 +1,6 @@
-import _ from 'lodash';
+// @ts-check
 
-function component() {
-  const element = document.createElement('div');
+import init from './init.js';
+import './style.css';
 
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-
-  return element;
-}
-
-document.body.appendChild(component());
+init();

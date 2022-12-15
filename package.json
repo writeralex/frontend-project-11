@@ -1,47 +1,54 @@
 {
-  "name": "@hexlet/code",
-  "version": "1.0.0",
-  "description": "[![Actions Status](https://github.com/writeralex/frontend-project-11/workflows/hexlet-check/badge.svg)](https://github.com/writeralex/frontend-project-11/actions)",
-  "private": true,
+  "name": "webpack-package",
+  "version": "0.1.0",
+  "description": "",
   "scripts": {
-    "start": "webpack serve --mode development",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --colors"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/writeralex/frontend-project-11.git"
+    "url": "git+https://github.com/hexlet-boilerplates/webpack-package.git"
   },
-  "author": "",
+  "author": "Kirill Mokevnin",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/writeralex/frontend-project-11/issues"
+    "url": "https://github.com/hexlet-boilerplates/webpack-package/issues"
   },
-  "type": "module",
-  "homepage": "https://github.com/writeralex/frontend-project-11#readme",
-  "dependencies": {
-    "@popperjs/core": "^2.11.6",
-    "bootstrap": "^5.2.3",
-    "debug": "^4.3.4",
-    "lodash": "^4.17.21"
+  "homepage": "https://github.com/hexlet-boilerplates/webpack-package#readme",
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/",
+    "testEnvironment": "jsdom"
   },
+  "main": "src/init.js",
   "devDependencies": {
-    "@jest/globals": "^29.0.1",
-    "autoprefixer": "^10.4.13",
-    "css-loader": "^6.7.2",
-    "eslint": "^8.28.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^27.0.0",
-    "jest": "^29.0.1",
-    "jest-cli": "^29.0.1",
-    "npm-check-updates": "^16.0.6",
-    "postcss-loader": "^7.0.1",
-    "sass": "^1.56.1",
-    "sass-loader": "^13.2.0",
-    "simple-git-hooks": "^2.8.0",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.38.1",
-     "webpack-cli": "^4.7.2"
+    "@babel/core": "^7.15.5",
+    "@babel/eslint-parser": "^7.15.4",
+    "@babel/preset-env": "^7.15.4",
+    "babel-jest": "^27.1.1",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.2.0",
+    "debug": "^4.3.2",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jest": "^24.4.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.2",
+    "jest": "^27.1.1",
+    "jest-cli": "^27.1.1",
+    "postcss-loader": "^6.1.1",
+    "postcss-preset-env": "^6.7.0",
+    "style-loader": "^3.2.1",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.52.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.11.1"
   },
-  "keywords": []
+  "dependencies": {
+    "npm-check-updates": "^11.8.5",
+    "sass": "^1.39.0",
+    "sass-loader": "^12.1.0"
+  }
 }
