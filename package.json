@@ -3,13 +3,9 @@
   "version": "0.1.0",
   "description": "[![Actions Status](https://github.com/writeralex/frontend-project-11/workflows/hexlet-check/badge.svg)](https://github.com/writeralex/frontend-project-11/actions)",
   "scripts": {
-
     "start": "webpack serve",
-    
     "build": "webpack",
-    
     "clear": "rd /s /q dist"
-    
   },
   "repository": {
     "type": "git",
@@ -57,7 +53,11 @@
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
-    "npm-check-updates": "^11.8.5"
+    "i18next": "^22.4.6",
+    "lodash": "^4.17.21",
+    "npm-check-updates": "^11.8.5",
+    "on-change": "^4.0.2",
+    "yup": "^0.32.11"
   },
   "keywords": []
 }

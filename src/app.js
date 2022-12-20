@@ -1,95 +1,69 @@
 // @ts-check
-/* eslint no-param-reassign: ["error", { "props": false }] */
 
-import i18n from 'i18next';
+//import i18n from 'i18next';
 import onChange from 'on-change';
-import ru from './locales/ru.js'
-import en from './locales/en.js'
+import * as yup from 'yup';
+import keyBy from 'lodash/keyBy.js';
+import isEmpty from 'lodash/isEmpty.js';
+import resources from './language/language.js';
+import i18n from 'i18next';
 
-// BEGIN (write your solution here)
-const render = (i18nInstance, state, watchedState) => {
-  const container = document.querySelector('.container');
-  container.innerHTML = '';
-  const divEl = document.createElement('div');
-  divEl.classList.add('btn-group');
-  divEl.setAttribute('role', 'group');
-  divEl.textContent = '';
+const schema = yup.object().shape({
+  link: yup.string().required('url is a required field').url(),
+});
 
-  const button1El = document.createElement('button');
-  button1El.setAttribute('type', 'button');
-  button1El.classList.add('btn');
-  button1El.classList.add('mb-3');
-  button1El.classList.add('en');
-  button1El.textContent = i18nInstance.t('langEn');
-
-  const button2El = document.createElement('button');
-  button2El.setAttribute('type', 'button');
-  button2El.classList.add('btn');
-  button2El.classList.add('mb-3');
-  button2El.classList.add('ru');
-  button2El.textContent = i18nInstance.t('langRu');
-
-  const buttonClickEl = document.createElement('button');
-  buttonClickEl.setAttribute('type', 'button');
-  buttonClickEl.classList.add('btn');
-  buttonClickEl.classList.add('btn-info');
-  buttonClickEl.classList.add('mb-3');
-  buttonClickEl.classList.add('align-self-center');
-  buttonClickEl.textContent = i18nInstance.t('clicksCount', { count: state.value });
-
-  const buttonResetEl = document.createElement('button');
-  buttonResetEl.setAttribute('type', 'button');
-  buttonResetEl.classList.add('btn');
-  buttonResetEl.classList.add('btn-warning');
-  buttonResetEl.textContent = i18nInstance.t('reset');
-
-  if (state.lang === 'en') {
-    button1El.classList.add('btn-primary');
-    button2El.classList.add('btn-outline-primary');
+const validate = (fields) => {
+  try {
+    schema.validateSync(fields, { abortEarly: false });
+    return {};
+  } catch (e) {
+    return keyBy(e.inner, 'path');
   }
-  if (state.lang === 'ru') {
-    button2El.classList.add('btn-primary');
-    button1El.classList.add('btn-outline-primary');
-  }
-  divEl.append(button1El);
-  divEl.append(button2El);
-
-  container.append(divEl);
-  container.append(buttonClickEl);
-  container.append(buttonResetEl);
-
-  buttonClickEl.addEventListener('click', () => {
-    watchedState.value += 1;
-  })
-  buttonResetEl.addEventListener('click', () => {
-    watchedState.value = 0;
-  })
-  button1El.addEventListener('click', () => {
-    //watchedState.value = 0;
-    watchedState.lang = 'en';
-
-  });
-  button2El.addEventListener('click', () => {
-    //watchedState.value = 0;
-    watchedState.lang = 'ru';
-  });
 };
 
-const runApp = async () => {
-  const i18nInstance = i18n.createInstance();
-  await i18nInstance.init({
-    lng: 'en',
-    debug: true,
-    resources: {
-      ru,
-      en,
+const app = () => {
+  const state = {
+    state: 'filling',
+    errors: {},
+    validationState: false,
+    fields: {
+      link: '',
     },
+    lang: 'ru',
+  }
+
+  const inputForm = document.querySelector('.inputForm');
+  const buttonRSS = document.querySelector('.btn-rss');
+  const buttonLang = document.querySelector('.btn-lan')
+  const result = document.querySelector('.result');
+
+  const watchedState = onChange(state, (path, value, oldValue) => {
+    const errors = validate(state.fields);
+    state.errors = errors;
+    state.validationState = isEmpty(errors);
+    if (state.validationState === true) {
+      //валидация работает
+    }
   });
 
-  const state = {
-    value: 0,
-    lang: 'en'
-  }
+  inputForm.addEventListener('input', (e) => {
+    watchedState.fields.link = e.target.value;
+  })
+  buttonLang.addEventListener('click', () => {
+    if (state.lang === 'ru') {
+      watchedState.lang = 'en';
+    }
+    if (state.lang === 'en') {
+      watchedState.lang = 'ru';
+    }
+  })
+  const i18nInstance = i18n.createInstance();
+  i18nInstance.init({
+    lng: 'ru',
+    debug: true,
+    resources,
+  });
+
   const english = () => {
     i18nInstance.changeLanguage('en', (err, t) => {
       if (err) return console.log('something went wrong loading', err);
@@ -101,29 +75,7 @@ const runApp = async () => {
       if (err) return console.log('something went wrong loading', err);
       t('ru');
     });
-  };
+  }
+}
 
-  const watchedState = onChange(state, (path, value) => {
-    switch (path) {
-      case 'value':
-        const buttonClickEl = document.querySelector('.btn-info')
-        buttonClickEl.textContent = i18nInstance.t('clicksCount', { count: value });
-        break;
-      case 'lang':
-        if (value === 'ru') {
-          russian();
-        }
-        if (value === 'en') {
-          english();
-        }
-        render(i18nInstance, state, watchedState);
-        break;
-      default:
-        break;
-    }
-  });
-  render(i18nInstance, state, watchedState)
-};
-
-export default runApp;
-// END
+export default app;
