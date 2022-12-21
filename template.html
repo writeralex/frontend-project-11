@@ -7,10 +7,11 @@
   </head>
   <body>
     <script type="module" src="./src/index.js"></script>
-    <div class="container-fluid bg-secondary bg-gradient p-4">
+    <main class="flex-grow-1">
+    <section class="container-fluid bg-secondary bg-gradient p-5">
       <div class="row offset-md-2">
         <div class="col">
-          <button type="button" class="btn btn-outline-light btn-sm btn-lan">English</button>
+          <button type="button" class="btn btn-outline-light btn-sm btn-lan"></button>
         </div>
       </div>
       <div class="row offset-md-2">
@@ -33,6 +34,18 @@
         <div class="col text-white text-opacity-50 result"></div>
       </div>
       </div>
+    </section>
+    <section class="container-fluid container-xxl p-5">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 order-1 mx-auto posts"></div>
+        <div class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer border-top py-3 mt-5 bg-light fixed-bottom">
+    <div class="container-xl">
+      <div class="text-center">created by Alexandra Yakuba</div>
     </div>
+  </footer>
   </body>
 </html>

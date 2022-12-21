@@ -34,15 +34,29 @@ const app = () => {
 
   const inputForm = document.querySelector('.inputForm');
   const buttonRSS = document.querySelector('.btn-rss');
-  const buttonLang = document.querySelector('.btn-lan')
+  const buttonLang = document.querySelector('.btn-lan');
   const result = document.querySelector('.result');
 
   const watchedState = onChange(state, (path, value, oldValue) => {
-    const errors = validate(state.fields);
-    state.errors = errors;
-    state.validationState = isEmpty(errors);
-    if (state.validationState === true) {
-      //валидация работает
+    switch (path) {
+      case 'fields.link':
+        const errors = validate(state.fields);
+        state.errors = errors;
+        state.validationState = isEmpty(errors);
+        if (state.validationState === true) {
+          result.textContent = value;
+        }
+        break;
+      case 'lang':
+        if (value === 'ru') {
+          russian();
+        }
+        if (value === 'en') {
+          english();
+        }
+        break;
+        default:
+        break;
     }
   });
 
@@ -62,6 +76,8 @@ const app = () => {
     lng: 'ru',
     debug: true,
     resources,
+  }).then(function(t) {
+    buttonLang.textContent = i18nInstance.t('buttonLan');
   });
 
   const english = () => {
