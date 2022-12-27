@@ -7,8 +7,8 @@ export default (data) => {
   const RSSFeedDescription = RSSdocument.querySelector('description');
   const RSSItemsEls = RSSdocument.querySelectorAll('item');
   const info = {
-    feedTitle: RSSFeedTitle,
-    feedDescription: RSSFeedDescription,
+    feedTitle: RSSFeedTitle.textContent,
+    feedDescription: RSSFeedDescription.textContent,
   };
   result.push(info);
   RSSItemsEls.forEach((item) => {

@@ -9,10 +9,12 @@ import i18n from 'i18next';
 import axios from 'axios';
 import parser from './parser.js'
 //https://news.un.org/feed/subscribe/ru/news/topic/humanitarian-aid/feed/rss.xml
-const downloadRSS = (link) => {
+const downloadRSS = (link, state) => {
   axios.get(link)
   .then(response => {
-    parser(response.data);
+    const parserResult = parser(response.data);
+    state.feeds.push(parserResult);
+    render(state);
   })
   .catch(error => {
     console.log(error);
@@ -41,6 +43,7 @@ const app = () => {
       link: '',
     },
     lang: 'ru',
+    feeds: [],
   }
 
   const inputForm = document.querySelector('.inputForm');
@@ -74,7 +77,7 @@ const app = () => {
   })
   buttonRSS.addEventListener('click', () => {
     if (state.validationState === true) {
-      downloadRSS(state.fields.link);
+      downloadRSS(state.fields.link, state);
       state.state = 'sent';
       result.textContent = i18nInstance.t('RSSokay');
       return;
@@ -111,6 +114,18 @@ const app = () => {
     });
   }
   
+}
+const body = document.querySelector('.body') //то, куда загружают фиды
+const render = (state,) => {
+  if (state.state === 'filling') {
+    body.textContent = '';
+    return
+  }
+  document.createElement('div');
+  alert(state.feeds[0][0].feedTitle) //Новости ООН... заголовок RSS
+  //...создаем структуру ссылок
+  //наполняем структуру статьями
+  //добавляем ее в боди
 }
 
 export default app;
