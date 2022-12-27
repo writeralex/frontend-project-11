@@ -1,12 +1,23 @@
 // @ts-check
 
-//import i18n from 'i18next';
 import onChange from 'on-change';
 import * as yup from 'yup';
 import keyBy from 'lodash/keyBy.js';
 import isEmpty from 'lodash/isEmpty.js';
 import resources from './language/language.js';
 import i18n from 'i18next';
+import axios from 'axios';
+import parser from './parser.js'
+//https://news.un.org/feed/subscribe/ru/news/topic/humanitarian-aid/feed/rss.xml
+const downloadRSS = (link) => {
+  axios.get(link)
+  .then(response => {
+    parser(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  })
+}
 
 const schema = yup.object().shape({
   link: yup.string().required('url is a required field').url(),
@@ -43,9 +54,6 @@ const app = () => {
         const errors = validate(state.fields);
         state.errors = errors;
         state.validationState = isEmpty(errors);
-        if (state.validationState === true) {
-          result.textContent = value;
-        }
         break;
       case 'lang':
         if (value === 'ru') {
@@ -62,6 +70,16 @@ const app = () => {
 
   inputForm.addEventListener('input', (e) => {
     watchedState.fields.link = e.target.value;
+    state.state = 'sending';
+  })
+  buttonRSS.addEventListener('click', () => {
+    if (state.validationState === true) {
+      downloadRSS(state.fields.link);
+      state.state = 'sent';
+      result.textContent = i18nInstance.t('RSSokay');
+      return;
+    }
+    result.textContent = i18nInstance.t('RSSnokay');
   })
   buttonLang.addEventListener('click', () => {
     if (state.lang === 'ru') {
@@ -92,6 +110,7 @@ const app = () => {
       t('ru');
     });
   }
+  
 }
 
 export default app;
