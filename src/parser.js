@@ -1,7 +1,6 @@
 export default (data) => {
   const result = [];
   const parser = new DOMParser();
-  console.log(parser.parseFromString(data, 'text/html'));
   const RSSdocument = parser.parseFromString(data, 'text/html');
   const RSSFeedTitle = RSSdocument.querySelector('title');
   const RSSFeedDescription = RSSdocument.querySelector('description');

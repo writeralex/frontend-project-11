@@ -5,33 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RSS-агрегатор</title>
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     <script type="module" src="./src/index.js"></script>
     <main class="flex-grow-1">
     <section class="container-fluid bg-secondary bg-gradient p-5">
-      <div class="row offset-md-2">
-        <div class="col">
+      <div class="row">
+        <div class="col-md-10 col-lg-8 mx-auto">
           <button type="button" class="btn btn-outline-light btn-sm btn-lan"></button>
         </div>
       </div>
-      <div class="row offset-md-2">
-        <div class="col">
-          <h1 class="text-white">RSS агрегатор</h1>
-          <p class="text-white">Начните читать RSS сегодня! Это легко, это красиво.</p>
-      <form>
+      <div class="col-md-10 col-lg-8 mx-auto text-white">
+          <h1 class="display-3 mb-0">RSS агрегатор</h1>
+          <p class="lead">Начните читать RSS сегодня! Это легко, это красиво.</p>
+      <form action class="text-body">
       <div class="row">
         <div class="col">
           <input class="form-control form-control-lg inputForm" type="text" name="text" id="textRSS" placeholder="Ссылка RSS" required>
         </div>
-        <div class="col">
+        <div class="col-auto">
           <button class="btn btn-primary btn-lg btn-rss" type="submit" data-bs-toggle="button">Добавить</button>
         </div>
+        </div>
       </form>
-      <div class="row mb-2">
-        <div class="col text-white text-opacity-50">Пример: https://ru.hexlet.io/lessons.rss</div>
-      </div>
-      <div class="row mb-2">
-        <div class="col text-white text-opacity-50 result"> </div>
+        <p class="mt-2 mb-0 text-opacity-50">Пример: https://ru.hexlet.io/lessons.rss</p>
+        <p class="feedback m-0 position-absolute small result"></p>
       </div>
       </div>
     </section>
