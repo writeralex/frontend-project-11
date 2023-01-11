@@ -1,7 +1,8 @@
 export default (data) => {
   const result = [];
   const parser = new DOMParser();
-  const RSSdocument = parser.parseFromString(data, 'text/html');
+  const RSSdocument = parser.parseFromString(data, 'text/xml');
+  console.log(RSSdocument)
   const RSSFeedTitle = RSSdocument.querySelector('title');
   const RSSFeedDescription = RSSdocument.querySelector('description');
   const RSSItemsEls = RSSdocument.querySelectorAll('item');
@@ -10,6 +11,7 @@ export default (data) => {
     feedDescription: RSSFeedDescription.textContent,
   };
   result.push(info);
+  const articles = [];
   RSSItemsEls.forEach((item) => {
     const title = item.querySelector('title');
     const link = item.querySelector('link');
@@ -19,7 +21,8 @@ export default (data) => {
       link: link.textContent,
       description: description.textContent,
     };
-    result.push(article);
+    articles.push(article);
   })
+  result.push(articles);
   return result;
 }
