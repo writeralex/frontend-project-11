@@ -8,7 +8,7 @@
   <body class="d-flex flex-column min-vh-100">
     <script type="module" src="./src/index.js"></script>
     <main class="flex-grow-1">
-    <section class="container-fluid bg-secondary bg-gradient p-5">
+    <section class="container-fluid bg-dark bg-gradient p-5">
       <div class="row">
         <div class="col-md-10 col-lg-8 mx-auto">
           <button type="button" class="btn btn-outline-light btn-sm btn-lan"></button>
@@ -20,7 +20,10 @@
       <form action class="text-body">
       <div class="row">
         <div class="col">
-          <input class="form-control form-control-lg inputForm" type="text" name="text" id="textRSS" placeholder="Ссылка RSS" required>
+        <div class="form-floating">
+          <input id="url-input" autofocus required class="form-control form-control-lg inputForm" type="text" name="text" id="textRSS" placeholder="Ссылка RSS" autocomplete="off">
+          <label for="url-input">Ссылка RSS</label>
+        </div>
         </div>
         <div class="col-auto">
           <button class="btn btn-primary btn-lg btn-rss" type="submit" data-bs-toggle="button">Добавить</button>
