@@ -70,13 +70,25 @@ export default (state, i18nInstance) => {
         }
         setAttribute(aEl, {'href': `${article.link}`, 'data-id': '2', 'target': '_blank', 'rel': 'noopenernoreferrer'});
         setAttribute(buttonEl, {'type': 'button', 'data-id': '2', 'data-bs-toggle': 'modal', 'data-bs-target': '#modal'});
-        aEl.classList.add('fw-bold');
+        if (article.status === 'unread') {
+          aEl.classList.add('fw-bold');
+        }
         buttonEl.classList.add('btn', 'btn-outline-primary', 'btn-small');
         aEl.textContent = article.title;
         buttonEl.textContent = i18nInstance.t('button');
         liEl.append(aEl);
         liEl.append(buttonEl);
         ulEl.append(liEl);
+        buttonEl.addEventListener('click', () => {
+          const modalTitle = document.querySelector('.modal-title');
+          const modalDescr = document.querySelector('.modal-body');
+          const modalFullArticle = document.querySelector('.full-article');
+          modalTitle.textContent = article.title;
+          modalDescr.textContent = article.description;
+          modalFullArticle.setAttribute('href', `${article.link}`);
+          article.status = 'read';
+          aEl.classList.remove('fw-bold');
+        })   
       })
     })
     feedsList.append(feedsUlEl);

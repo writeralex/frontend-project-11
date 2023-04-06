@@ -13,6 +13,7 @@ export default (data) => {
   result.push(info);
   const articles = [];
   RSSItemsEls.forEach((item) => {
+    let n = 0;
     const title = item.querySelector('title');
     const link = item.querySelector('link');
     const description = item.querySelector('description')
@@ -20,6 +21,8 @@ export default (data) => {
       title: title.textContent,
       link: link.textContent,
       description: description.textContent,
+      status: 'unread',
+      num: n + 1,
     };
     articles.push(article);
   })

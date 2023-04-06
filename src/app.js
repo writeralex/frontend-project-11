@@ -12,14 +12,21 @@ import render from './view.js';
 
 //https://news.un.org/feed/subscribe/ru/news/topic/culture-and-education/feed/rss.xml
 const downloadRSS = (link, state, i18nInstance) => {
-  axios.get(link)
+  axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
   .then(response => {
-    const parserResult = parser(response.data);
+    const parserResult = parser(response.data.contents);
     state.feeds.push(parserResult);
+    const autoDownload = () => {
+      render(state, i18nInstance);
+      setTimeout(() => {
+        autoDownload();
+      }, 5000)
+    }
+    autoDownload();
     render(state, i18nInstance);
   })
   .catch(error => {
-    console.log(error);
+    state.URLstate = error.message;
   })
 }
 
@@ -28,6 +35,7 @@ const app = () => {
     state: 'filling',
     errors: {},
     validationState: false,
+    URLstate: '',
     fields: {
       link: '',
     },
@@ -41,57 +49,56 @@ const app = () => {
     lng: 'ru',
     debug: true,
     resources,
-  }).then(function(t) {
-    buttonLang.textContent = i18nInstance.t('buttonLan');
-  });
-
-  const schema = yup.object().shape({
-    link: yup.string().required('url is a required field').url().notOneOf(state.links, `${i18nInstance.t('RSSrepeat')}`,),
-  });
-  
-  const validate = (fields) => {
-    try {
-      schema.validateSync(fields, { abortEarly: false });
-      return {};
-    } catch (e) {
-      return keyBy(e.inner, 'path');
-    }
-  };
-
+  }).then(function() {
+    
+    
+    
+    const watchedState = onChange(state, (path, value) => {
+      switch (path) {
+        case 'fields.link':
+          const errors = state.validate(state.fields);
+          state.errors = errors;
+          state.validationState = isEmpty(errors);      
+          state.links.push(value);
+          break;
+          default:
+          break;
+      }
+    });
+    
   const inputForm = document.querySelector('.inputForm');
   const buttonRSS = document.querySelector('.btn-rss');
-  const buttonLang = document.querySelector('.btn-lan');
   const result = document.querySelector('.result');
 
-  const watchedState = onChange(state, (path, value, oldValue) => {
-    switch (path) {
-      case 'fields.link':
-        state.links.push(value);
-        const errors = validate(state.fields);
-        state.errors = errors;
-        state.validationState = isEmpty(errors);
-        break;
-      case 'lang':
-        if (value === 'ru') {
-          russian();
-        }
-        if (value === 'en') {
-          english();
-        }
-        break;
-        default:
-        break;
-    }
-  });
-
   inputForm.addEventListener('input', (e) => {
+    const schema = yup.object().shape({
+      link: yup.string().required('url is a required field').url().notOneOf(state.links, `${i18nInstance.t('RSSrepeat')}`,),
+    });
+    state.validate = (fields) => {
+      try {
+        schema.validateSync(fields, { abortEarly: false });
+        return {};
+      } catch (e) {
+        return keyBy(e.inner, 'path');
+      }
+    };
     watchedState.fields.link = e.target.value;
     state.state = 'sending';
   })
   buttonRSS.addEventListener('click', () => {
+    if (state.URLstate === 'Network Error') {
+      result.classList.add('text-danger');
+      result.textContent = i18nInstance.t('networkError');
+      return;
+    }
     if (state.validationState) {
-      downloadRSS(state.fields.link, state, i18nInstance);
-      //state.links.push(state.fields.link);
+      const autoDownload = () => {
+        downloadRSS(state.fields.link, state, i18nInstance);
+        setTimeout(() => {
+          autoDownload();
+        }, 5000)
+      }
+      autoDownload();
       inputForm.value = '';
       state.fields.link = '';
       state.state = 'sent';
@@ -100,33 +107,15 @@ const app = () => {
       result.textContent = i18nInstance.t('RSSokay');
       return;
     }
+    if (inputForm.value === '') {
+      result.classList.add('text-danger');
+      result.textContent = i18nInstance.t('RSSempty');
+      return;
+    }
     result.classList.remove('text-success');
     result.classList.add('text-danger');
     result.textContent = i18nInstance.t('RSSnokay');
   })
-  buttonLang.addEventListener('click', () => {
-    if (state.lang === 'ru') {
-      watchedState.lang = 'en';
-    }
-    if (state.lang === 'en') {
-      watchedState.lang = 'ru';
-    }
-  })
-  
-
-  const english = () => {
-    i18nInstance.changeLanguage('en', (err, t) => {
-      if (err) return console.log('something went wrong loading', err);
-      t('en');
-    });
-  }
-  const russian = () => {
-    i18nInstance.changeLanguage('ru', (err, t) => {
-      if (err) return console.log('something went wrong loading', err);
-      t('ru');
-    });
-  }
+  });
 }
-
-
 export default app;
